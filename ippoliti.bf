@@ -1,3 +1,5 @@
+#!/usr/bin/beef
+
 Challenge by Giuliano Ippoliti
 https://www(dot)linkedin(dot)com/pulse/brainfck(hyphen)password(hyphen)challenge(hyphen)giuliano(hyphen)ippoliti
 
