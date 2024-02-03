@@ -8,3 +8,5 @@ sudo apt install -y beef
 ```
 
 You can also use Project Nayuki's [Brainfuck interpreter](https://www.nayuki.io/page/brainfuck-interpreter-javascript).
+
+The challenge by Giuliano Ippoliti is available [here](https://www.linkedin.com/pulse/brainfck-password-challenge-giuliano-ippoliti).
