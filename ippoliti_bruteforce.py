@@ -15,31 +15,28 @@ STR_NEW_LINE = "\n"
 STR_SPACE = " "
 
 
-def generate_bruteforce_nums(start, end, length):
-	if length < 1 or end < start:
-		return None
+def generate_bruteforce_nums(lower_bound, upper_bound, length):
+	if length < 1:
+		raise ValueError("The length must be greater than or equal to 1.")
 
-	delta = end - start
+	if upper_bound < lower_bound:
+		upper_bound, lower_bound = lower_bound, upper_bound
 
-	if delta < length:
-		return None
+	delta = upper_bound - lower_bound
 
-	size = delta ** length
-	numbers = [[0 for _ in range(length)] for _ in range(size)]
+	if length > delta:
+		raise ValueError(
+			"The length must not exceed the gap between the bounds.")
 
-	for j in range(length-1, -1, -1):
-		column_param = length - j
+	d = delta + 1
+	for i in range(d ** length):
+		numbers = [i % d + lower_bound]
 
-		for i in range(0, size-(delta*column_param)+1, delta ** column_param):
-			row_index = i
+		for j in range(length-2, -1, -1):
+			n = (i // (d ** (length - j - 1))) % d + lower_bound
+			numbers.insert(0, n)
 
-			for n in range(start, end):
-
-				for _ in range(delta ** (column_param-1)):
-					numbers[row_index][j] = n
-					row_index += 1
-
-	return numbers
+		yield numbers
 
 
 def make_tmp_input_file(input_path, input_nums):
@@ -60,9 +57,13 @@ def read_bruteforce_numbers(num_path):
 
 		for line in lines:
 			num_strs = line.split(STR_SPACE)
-			numbers.append([int(n) for n in num_strs])
 
-	return numbers
+			try:
+				numbers = [int(n) for n in num_strs]
+			except ValueError:
+				continue
+
+			yield numbers
 
 
 def write_bruteforce_numbers(num_path, numbers):
@@ -70,7 +71,8 @@ def write_bruteforce_numbers(num_path, numbers):
 	with num_path.open(mode=MODE_W) as num_file:
 
 		for nums in numbers:
-			num_file.write(STR_SPACE.join(nums) + STR_NEW_LINE)
+			nums_as_str = [str(n) for n in nums]
+			num_file.write(STR_SPACE.join(nums_as_str) + STR_NEW_LINE)
 
 
 bruteforce_num_path = Path("./ippoliti_bruteforce_nums.txt").resolve()
@@ -79,19 +81,21 @@ input_path = Path("./ippoliti_input.txt").resolve()
 if bruteforce_num_path.exists():
 	numbers = read_bruteforce_numbers(bruteforce_num_path)
 else:
-	numbers = generate_bruteforce_nums(0, 128, 8)
-	write_bruteforce_numbers(bruteforce_num_path, numbers)
+	#numbers = generate_bruteforce_nums(0, 128, 8)
+	numbers = generate_bruteforce_nums(2, 6, 3)
+	write_bruteforce_numbers(bruteforce_num_path, list(numbers))
 
 for nums in numbers:
-	input_chars = make_tmp_input_file(input_path, nums)
+	print(nums)
+#	input_chars = make_tmp_input_file(input_path, nums)
 
-	with redirect_stdout(StringIO()) as beef_output:
-		system(f"beef -i {input_path} ippoliti.bf")
-		result = beef_output.getvalue()
+#	with redirect_stdout(StringIO()) as beef_output:
+#		system(f"beef -i {input_path} ippoliti.bf")
+#		result = beef_output.getvalue()
 
-		if result == STR_EXCLAIM:
-			print(nums)
-			print(input_chars)
+#		if result == STR_EXCLAIM:
+#			print(nums)
+#			print(input_chars)
 
-input_path.unlink()
+#input_path.unlink()
 
