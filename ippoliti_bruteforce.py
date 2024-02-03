@@ -81,21 +81,23 @@ input_path = Path("./ippoliti_input.txt").resolve()
 if bruteforce_num_path.exists():
 	numbers = read_bruteforce_numbers(bruteforce_num_path)
 else:
-	#numbers = generate_bruteforce_nums(0, 128, 8)
-	numbers = generate_bruteforce_nums(2, 6, 3)
+	numbers = generate_bruteforce_nums(0, 128, 8)
+	#numbers = generate_bruteforce_nums(2, 6, 3)
 	write_bruteforce_numbers(bruteforce_num_path, numbers)
 
+beef_cmd = f"beef -i {input_path} ippoliti.bf"
+
 for nums in numbers:
-	print(nums)
-#	input_chars = make_tmp_input_file(input_path, nums)
+	#print(nums)
+	input_chars = make_tmp_input_file(input_path, nums)
 
-#	with redirect_stdout(StringIO()) as beef_output:
-#		system(f"beef -i {input_path} ippoliti.bf")
-#		result = beef_output.getvalue()
+	with redirect_stdout(StringIO()) as beef_output:
+		system(beef_cmd)
+		result = beef_output.getvalue()
 
-#		if result == STR_EXCLAIM:
-#			print(nums)
-#			print(input_chars)
+		if result == STR_EXCLAIM:
+			print(nums)
+			print(input_chars)
 
-#input_path.unlink()
+input_path.unlink()
 
