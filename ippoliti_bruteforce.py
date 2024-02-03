@@ -75,20 +75,11 @@ def write_bruteforce_numbers(num_path, numbers):
 			num_file.write(STR_SPACE.join(nums_as_str) + STR_NEW_LINE)
 
 
-bruteforce_num_path = Path("./ippoliti_bruteforce_nums.txt").resolve()
 input_path = Path("./ippoliti_input.txt").resolve()
-
-if bruteforce_num_path.exists():
-	numbers = read_bruteforce_numbers(bruteforce_num_path)
-else:
-	numbers = generate_bruteforce_nums(0, 128, 8)
-	#numbers = generate_bruteforce_nums(2, 6, 3)
-	write_bruteforce_numbers(bruteforce_num_path, numbers)
-
 beef_cmd = f"beef -i {input_path} ippoliti.bf"
+numbers = generate_bruteforce_nums(0, 128, 8)
 
 for nums in numbers:
-	#print(nums)
 	input_chars = make_tmp_input_file(input_path, nums)
 
 	with redirect_stdout(StringIO()) as beef_output:
