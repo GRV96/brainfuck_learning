@@ -83,7 +83,7 @@ if bruteforce_num_path.exists():
 else:
 	#numbers = generate_bruteforce_nums(0, 128, 8)
 	numbers = generate_bruteforce_nums(2, 6, 3)
-	write_bruteforce_numbers(bruteforce_num_path, list(numbers))
+	write_bruteforce_numbers(bruteforce_num_path, numbers)
 
 for nums in numbers:
 	print(nums)
